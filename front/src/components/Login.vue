@@ -4,6 +4,7 @@
       <div class='login'>
         <h1 style="color: #002446">IrisAdminApi</h1>
         <h3 class="logoText">develop from snowlyg</h3>
+        <h6 class="logoText">演示账号/密码 : username / password</h6>
         <div class="form text-center loginForm">
           <el-row>
             <el-col class="margin-bottom">
@@ -17,10 +18,8 @@
             <el-col class="margin-bottom">
               <el-button type="primary" class="loginBtn" @click="login" :loading="loading">登录</el-button>
             </el-col>
-
             <el-col class="margin-bottom">
-             <p>演示账号： username</p>
-             <p>演示密码： password</p>
+              <a @click="reset_data" >重置系统数据</a>
             </el-col>
           </el-row>
         </div>
@@ -31,67 +30,76 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
-    import utils from '@/utils'
+  import {mapActions} from 'vuex'
+  import utils from '@/utils'
 
-    export default {
-        name: 'Login',
-        data() {
-            return {
-                loading: false,
-                Toform: {
-                    name: '',
-                    password: ''
-                }
-            }
-        },
-        computed: {
-            // ...mapState([
-            //     'UserProfile'
-            // ])
-        },
-        methods: {
-            ...mapActions([
-                'getUserProfile'
-            ]),
-            async login() {
-                if (this.Toform.name == '') {
-                    this.$message({
-                        type: 'info',
-                        message: '请输入账号'
-                    })
-                    return false
-                }
-                if (this.Toform.password == '') {
-                    this.$message({
-                        type: 'info',
-                        message: '请输入密码'
-                    })
-                    return false
-                }
-                this.loading = true
-                const data = await utils.getToken(this.Toform);
-                if (!data.data.status) {
-                    this.$message({
-                        type: 'info',
-                        message: data.data.msg
-                    })
-                    this.loading = false
-                    return false
-                } else {
-                    utils.setCookie('token', data.data.data.access_token, null);
-                    await this.getUserProfile();
-                    this.loading = false
-                    this.$router.replace({
-                        name: 'Home'
-                    })
-                }
-            }
-        },
-        mounted() {
-
+  export default {
+    name: 'Login',
+    data() {
+      return {
+        loading: false,
+        Toform: {
+          name: '',
+          password: ''
         }
+      }
+    },
+    computed: {
+      // ...mapState([
+      //     'UserProfile'
+      // ])
+    },
+    methods: {
+      ...mapActions([
+        'getUserProfile'
+      ]),
+      async login() {
+        if (this.Toform.name == '') {
+          this.$message({
+            type: 'info',
+            message: '请输入账号'
+          })
+          return false
+        }
+        if (this.Toform.password == '') {
+          this.$message({
+            type: 'info',
+            message: '请输入密码'
+          })
+          return false
+        }
+        this.loading = true
+        const data = await utils.getToken(this.Toform);
+        if (!data.data.status) {
+          this.$message({
+            type: 'info',
+            message: data.data.msg
+          })
+          this.loading = false
+          return false
+        } else {
+          utils.setCookie('token', data.data.data.access_token, null);
+          await this.getUserProfile();
+          this.loading = false
+          this.$router.replace({
+            name: 'Home'
+          })
+        }
+      }, async reset_data() {
+
+        const data = await utils.resetData();
+        this.$message({
+          type: 'info',
+          message: data.data.msg
+        });
+
+        return false
+      },
+    },
+    mounted() {
+
     }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
