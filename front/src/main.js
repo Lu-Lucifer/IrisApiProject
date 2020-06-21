@@ -11,7 +11,9 @@ import VueHtml5Editor from 'vue-html5-editor' //富文本编辑器
 import utils from '@/utils'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import flvjs from 'flvjs';
 
+Vue.use(flvjs);
 Vue.use(ElementUI);
 Vue.use(DataTables);
 Vue.use(VueAxios,axios);
@@ -102,4 +104,5 @@ new Vue({
     App
   },
   template: '<App/>'
+  ,flvjs
 });
