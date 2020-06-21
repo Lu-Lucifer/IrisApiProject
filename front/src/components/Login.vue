@@ -25,13 +25,17 @@
         </div>
       </div>
     </div>
-    <video id="videoElement"></video>
+    <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" poster="">
+      <source src="http://127.0.0.1:8085/record/out.m3u8" type="application/x-mpegURL">
+    </video>
   </div>
 </template>
 
 <script>
   import {mapActions} from 'vuex'
   import utils from '@/utils'
+  import videojs from 'video.js'
+  import 'videojs-contrib-hls'
 
   export default {
     name: 'Login',
@@ -97,16 +101,15 @@
       },
     },
     mounted() {
-      if (flvjs.isSupported()){
-        var videoElement = document.getElementById('videoElement');
-        var flvPlayer = flvjs.createPlayer({
-          type: 'flv',
-          url: 'http://127.0.0.1:8085/record/out.m3u8'
-        });
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-        // flvPlayer.play();
-      }
+      videojs('my-video', {
+        bigPlayButton: false,
+        textTrackDisplay: false,
+        posterImage: true,
+        errorDisplay: false,
+        controlBar: true
+      }, function () {
+        this.play()
+      })
     }
   }
 </script>
