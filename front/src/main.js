@@ -12,6 +12,7 @@ import utils from '@/utils'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+
 Vue.use(ElementUI);
 Vue.use(DataTables);
 Vue.use(VueAxios,axios);
