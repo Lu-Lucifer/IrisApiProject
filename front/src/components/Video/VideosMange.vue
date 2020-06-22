@@ -3,79 +3,81 @@
     <div class="head">
       <h1 class="head-title">{{$route.meta.title}}</h1>
       <div class="head-action">
-        <el-input
-          v-model="customFilters[0].vals"
-          prefix-icon="el-icon-search"
-          placeholder="搜索视频标识"
-          class="class_input_width">
-        </el-input>
+        <el-input v-model="customFilters[0].vals" prefix-icon="el-icon-search" placeholder="搜索视频标识" class="class_input_width"></el-input>
         <el-button type="primary" @click="goSeed">添加频道</el-button>
       </div>
     </div>
 
     <div class="content">
-      <data-tables-server :data="VideosData.ListData" :filters="customFilters" :total="VideosData.total"
-                          @query-change="getData"
-                          ref="multipleTable" v-loading="loading" :pagination-props="{ pageSizes: [5, 10, 20] }"
-                          :page-size="10">
+<!--      <data-tables-server :data="VideosData.ListData" :filters="customFilters" :total="VideosData.total"-->
+<!--                          @query-change="getData"-->
+<!--                          ref="multipleTable" v-loading="loading" :pagination-props="{ pageSizes: [5, 10, 20] }"-->
+<!--                          :page-size="10">-->
 
-        <el-table-column prop="DisplayName" label="视频名称" key="DisplayName" sortable="custom">
-          <template slot-scope="scope">
-            <div class="blue cursor" @click="details(scope)"><b>{{scope.row.DisplayName}}</b></div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="Name" label="标识" key="Name" sortable="custom">
-        </el-table-column>
-        <el-table-column prop="CreatedAt" label="创建时间" key="CreatedAt" sortable="custom">
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <div class="operation_box">
-              <span @click="edit(scope.row)">编辑</span>
-              <span @click="deletes(scope.row)">删除</span>
-            </div>
-          </template>
-        </el-table-column>
-      </data-tables-server>
+<!--        <el-table-column prop="DisplayName" label="视频名称" key="DisplayName" sortable="custom">-->
+<!--          <template slot-scope="scope">-->
+<!--            <div class="blue cursor" @click="details(scope)"><b>{{scope.row.DisplayName}}</b></div>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column prop="Name" label="标识" key="Name" sortable="custom">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column prop="CreatedAt" label="创建时间" key="CreatedAt" sortable="custom">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column label="操作">-->
+<!--          <template slot-scope="scope">-->
+<!--            <div class="operation_box">-->
+<!--              <span @click="edit(scope.row)">编辑</span>-->
+<!--              <span @click="deletes(scope.row)">删除</span>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </data-tables-server>-->
+      <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" poster="">
+        <source src="http://127.0.0.1:8085/record/out.m3u8" type="application/x-mpegURL">
+      </video>
     </div>
-    <el-dialog title="视频详情" :visible.sync="previewcol" class="previewcol">
-      <div class="cl-box" style="width:100%;">
-        <div class="cl-row">
-          <div class="cl-td">
-            <p>视频名称</p>
-          </div>
-          <div class="cl-td">
-            <p>{{colshowlog.DisplayName}}</p>
-          </div>
-        </div>
-        <div class="cl-row">
-          <div class="cl-td">
-            <p>标识</p>
-          </div>
-          <div class="cl-td">
-            <p>{{colshowlog.Name}}</p>
-          </div>
-        </div>
-        <div class="cl-row">
-          <div class="cl-td">
-            <p>创建时间</p>
-          </div>
-          <div class="cl-td">
-            <p>{{colshowlog.CreatedAt}}</p>
-          </div>
-        </div>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="previewcol = false">取 消</el-button>
-        <el-button type="primary" @click="edit(colshowlog)">编 辑</el-button>
-      </div>
-    </el-dialog>
+<!--    <el-dialog title="视频详情" :visible.sync="previewcol" class="previewcol">-->
+<!--      <div class="cl-box" style="width:100%;">-->
+<!--        <div class="cl-row">-->
+<!--          <div class="cl-td">-->
+<!--            <p>视频名称</p>-->
+<!--          </div>-->
+<!--          <div class="cl-td">-->
+<!--            <p>{{colshowlog.DisplayName}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="cl-row">-->
+<!--          <div class="cl-td">-->
+<!--            <p>标识</p>-->
+<!--          </div>-->
+<!--          <div class="cl-td">-->
+<!--            <p>{{colshowlog.Name}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="cl-row">-->
+<!--          <div class="cl-td">-->
+<!--            <p>创建时间</p>-->
+<!--          </div>-->
+<!--          <div class="cl-td">-->
+<!--            <p>{{colshowlog.CreatedAt}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div slot="footer" class="dialog-footer">-->
+<!--        <el-button @click="previewcol = false">取 消</el-button>-->
+<!--        <el-button type="primary" @click="edit(colshowlog)">编 辑</el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
+
   </div>
 </template>
 
 <script>
   import {mapActions, mapState} from 'vuex'
   import utils from '@/utils'
+  import videojs from 'video.js'
+  import 'videojs-contrib-hls'
+  import 'video.js/dist/video-js.css'
 
   export default {
     components: {},
@@ -179,6 +181,15 @@
     },
     mounted() {
       this.getData()
+      videojs('my-video', {
+        bigPlayButton: false,
+        textTrackDisplay: false,
+        posterImage: true,
+        errorDisplay: false,
+        controlBar: true
+      }, function () {
+        this.play()
+      })
     }
   }
 </script>

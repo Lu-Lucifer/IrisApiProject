@@ -48,7 +48,7 @@ export default new Router({
 				meta: {
 					title: '视频管理',
 					requireAuth: true,
-					cid: 6
+					cid: 5
 				},
 				component: VideosMange,
 			}]
