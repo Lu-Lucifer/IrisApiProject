@@ -29,7 +29,7 @@
       return {
         activeMenu: '',
         // name用于高亮设置，url用于跳转
-        menus: [ {
+        menus: [{
           id: 6,
           name: 'SetUp',
           url: 'PermissionsMange',
@@ -144,12 +144,10 @@
     padding: 0 20px;
     line-height: 56px;
 
-  &
-  -icon-dow {
-    float: right;
-    margin-top: 22px;
-  }
-
+    &-icon-dow {
+      float: right;
+      margin-top: 22px;
+    }
   }
 
   .linka:hover {
