@@ -29,22 +29,7 @@
       return {
         activeMenu: '',
         // name用于高亮设置，url用于跳转
-        menus: [{
-          id: 4,
-          name: 'Video',
-          url: 'VideosMange',
-          description: '视频管理',
-          icon: 'iconfont icon-video',
-          is_show: true,
-          children: [{
-            id: 5,
-            name: 'VideosMange',
-            url: 'VideosMange',
-            description: '视频列表',
-            icon: '',
-          }
-          ]
-        }, {
+        menus: [ {
           id: 6,
           name: 'SetUp',
           url: 'PermissionsMange',

@@ -11,7 +11,6 @@ import RoleMange from '@/components/SetUp/RoleMange'
 import AddRole from '@/components/SetUp/RoleMange/AddRole'
 import UsersMange from '@/components/SetUp/UsersMange'
 import AddUsers from '@/components/SetUp/UsersMange/AddUsers'
-import VideosMange from '@/components/Video/VideosMange'
 
 
 const parentComponent = {
@@ -34,25 +33,6 @@ export default new Router({
 			},
 			component: Home,
 		}, {
-			path: 'Video',
-			name: 'Video',
-			meta: {
-				title: '视频',
-				requireAuth: true,
-			},
-			component: parentComponent,
-			children: [
-			  {
-				path: 'VideosMange',
-				name: 'VideosMange',
-				meta: {
-					title: '视频管理',
-					requireAuth: true,
-					cid: 5
-				},
-				component: VideosMange,
-			}]
-		},{
 			path: 'SetUp',
 			name: 'SetUp',
 			meta: {
