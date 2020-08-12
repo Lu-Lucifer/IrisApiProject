@@ -7,15 +7,15 @@
       <pan-thumb :image="avatar" class="panThumb" />
       <mallki class-name="mallki-text" text="IrisAdminApi" />
       <div style="padding-top:35px;" class="progress-item">
-        <span>Vue</span>
+        <span>Go</span>
         <el-progress :percentage="70" />
       </div>
       <div class="progress-item">
-        <span>JavaScript</span>
+        <span>Vue</span>
         <el-progress :percentage="18" />
       </div>
       <div class="progress-item">
-        <span>CSS</span>
+        <span>Other</span>
         <el-progress :percentage="12" />
       </div>
       <div class="progress-item">
