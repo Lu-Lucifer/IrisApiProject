@@ -3,6 +3,11 @@
     <el-button type="primary" @click="handleAddRole">添加角色</el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
+      <el-table-column align="center" label="ID" width="220">
+        <template slot-scope="scope">
+          {{ scope.row.id }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="角色标识" width="220">
         <template slot-scope="scope">
           {{ scope.row.name }}
@@ -70,7 +75,7 @@ import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role
 const defaultRole = {
   id: 0,
   name: '',
-  diaplay_name: '',
+  display_name: '',
   description: '',
   perms: [],
   perm_ids: []
@@ -187,27 +192,33 @@ export default {
       this.role.perm_ids = this.generateTree(deepClone(this.serviceRoutes), checkedKeys)
 
       if (isEdit) {
-        await updateRole(this.role.id, this.role)
-        for (let index = 0; index < this.rolesList.length; index++) {
-          if (this.rolesList[index].id === this.role.id) {
-            this.rolesList.splice(index, 1, Object.assign({}, this.role))
-            break
+        const { code, data } = await updateRole(this.role.id, this.role)
+        // eslint-disable-next-line eqeqeq
+        if (code === 200) {
+          this.role = data
+          for (let index = 0; index < this.rolesList.length; index++) {
+            if (this.rolesList[index].id === this.role.id) {
+              this.rolesList.splice(index, 1, Object.assign({}, this.role))
+              break
+            }
           }
         }
       } else {
-        const { data } = await addRole(this.role)
-        this.role.id = data.data.id
-        this.rolesList.push(this.role)
+        const { code, data } = await addRole(this.role)
+        if (code === 200) {
+          this.role = data.data
+          this.rolesList.push(this.role)
+        }
       }
 
-      const { description, diaplay_name, name } = this.role
+      const { description, display_name, name } = this.role
       this.dialogVisible = false
       this.$notify({
         title: 'Success',
         dangerouslyUseHTMLString: true,
         message: `
             <div>角色标识: ${name}</div>
-            <div>角色名称: ${diaplay_name}</div>
+            <div>角色名称: ${display_name}</div>
             <div>描述: ${description}</div>
           `,
         type: 'success'

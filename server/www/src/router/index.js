@@ -143,7 +143,7 @@ export const asyncRoutes = [
     children: [
       {
         path: 'page',
-        component: () => import('@/views/permission/page'),
+        component: () => import('@/views/permission/perm'),
         name: '权限页面',
         meta: {
           title: '权限页面',
@@ -152,11 +152,11 @@ export const asyncRoutes = [
       },
       {
         path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: '指令页面',
+        component: () => import('@/views/permission/user'),
+        name: '用户页面',
         meta: {
-          title: '指令页面'
-          // if do not set roles, means: this page does not require permission
+          title: '用户页面',
+          roles: ['admin']
         }
       },
       {
@@ -388,7 +388,7 @@ export const asyncRoutes = [
 ]
 
 const createRouter = () => new Router({
-  mode: 'history', // require service support
+  // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
