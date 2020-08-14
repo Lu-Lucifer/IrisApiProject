@@ -32,7 +32,7 @@
 // www/dist/static/js/chunk-7a87c9ea.9113b6be.js
 // www/dist/static/js/chunk-elementUI.1a9f2301.js
 // www/dist/static/js/chunk-libs.102e56c5.js
-package IrisAdminApi
+package main
 
 import (
 	"bytes"
