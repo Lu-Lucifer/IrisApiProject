@@ -1,13 +1,10 @@
-server/*.dll
-server/*.db
 *.dll
+*.db
+*.exe
+.air.conf
+coverage.txt
 
-server/backend.exe
-server/backend.exe~
-server/backend
-server/.air.conf
-
-server/tmp/
+tmp/
 /logs/
 /.idea/
 
