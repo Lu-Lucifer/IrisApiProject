@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'GoDarwin',
+  title: 'IrisAdminApi',
 
   /**
    * @type {boolean} true | false
