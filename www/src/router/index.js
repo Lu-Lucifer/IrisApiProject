@@ -7,8 +7,11 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
+/* import componentsRouter from './modules/components'
+ import chartsRouter from './modules/charts'*/
+// import tableRouter from './modules/table'
+/* import nestedRouter from './modules/nested'*/
 
-import tableRouter from './modules/table'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -80,7 +83,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/admin/profile',
     component: Layout,
@@ -143,10 +145,62 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/admin/article',
+    component: Layout,
+    redirect: '/admin/article/index',
+    alwaysShow: true, // will always show the root menu
+    name: '文章管理',
+    meta: {
+      title: '文章管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: '/admin/article/index',
+        component: () => import('@/views/article/list'),
+        name: '文章列表',
+        meta: {
+          title: '文章列表',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: '/admin/article/add',
+        component: () => import('@/views/article/create'),
+        name: '添加文章',
+        meta: {
+          title: '添加文章',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      // {
+      //   path: '/admin/article/tag',
+      //   component: () => import('@/views/article/tag'),
+      //   name: '文章标签',
+      //   meta: {
+      //     title: '文章标签',
+      //     roles: ['admin']
+      //   }
+      // },
+      // {
+      //   path: '/admin/article/type',
+      //   component: () => import('@/views/article/type'),
+      //   name: '文章分类',
+      //   meta: {
+      //     title: '文章分类',
+      //     roles: ['admin']
+      //   }
+      // }
+    ]
+  },
 
   /** when your routing map is too long, you can split it into small modules **/
-
-  tableRouter,
+  // componentsRouter,
+  // chartsRouter,
+  // nestedRouter,
+  // tableRouter,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
