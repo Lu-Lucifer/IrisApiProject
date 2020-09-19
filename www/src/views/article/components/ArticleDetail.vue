@@ -7,10 +7,10 @@
         <PlatformDropdown v-model="postForm.platforms" />
         <SourceUrlDropdown v-model="postForm.source_uri" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-          Publish
+          发布
         </el-button>
         <el-button v-loading="loading" type="warning" @click="draftForm">
-          Draft
+          草稿
         </el-button>
       </sticky>
 
@@ -21,23 +21,35 @@
           <el-col :span="24">
             <el-form-item style="margin-bottom: 40px;" prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
-                Title
+                标题
               </MDinput>
             </el-form-item>
 
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
+                  <el-form-item label-width="60px" label="作者:" class="postInfo-container-item">
+                    <el-select
+                      v-model="postForm.author"
+                      :remote-method="getRemoteUserList"
+                      filterable
+                      default-first-option
+                      remote
+                      placeholder="搜索用户"
+                    >
                       <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
                     </el-select>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="10">
-                  <el-form-item label-width="120px" label="Publish Time:" class="postInfo-container-item">
-                    <el-date-picker v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
+                  <el-form-item label-width="120px" label="发布时间:" class="postInfo-container-item">
+                    <el-date-picker
+                      v-model="displayTime"
+                      type="datetime"
+                      format="yyyy-MM-dd HH:mm:ss"
+                      placeholder="选择日期时间"
+                    />
                   </el-form-item>
                 </el-col>
 
@@ -58,8 +70,15 @@
           </el-col>
         </el-row>
 
-        <el-form-item style="margin-bottom: 40px;" label-width="70px" label="Summary:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
+        <el-form-item style="margin-bottom: 40px;" label-width="70px" label="摘要:">
+          <el-input
+            v-model="postForm.content_short"
+            :rows="1"
+            type="textarea"
+            class="article-textarea"
+            autosize
+            placeholder="请输入内容"
+          />
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
         </el-form-item>
 
@@ -81,7 +100,7 @@ import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
-import { fetchArticle } from '@/api/article'
+import { createArticle, fetchArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
@@ -181,41 +200,71 @@ export default {
     fetchData(id) {
       fetchArticle(id).then(response => {
         this.postForm = response.data
-
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-        // set tagsview title
-        this.setTagsViewTitle()
-
-        // set page title
-        this.setPageTitle()
+        if (this.isEdit) {
+          this.setPageTitle()
+        } else {
+          this.setTagsViewTitle()
+        }
       }).catch(err => {
         console.log(err)
       })
     },
     setTagsViewTitle() {
-      const title = 'Edit Article'
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
+      const title = '预览文章'
+      const route = Object.assign({}, this.tempRoute, { title: `${title}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.id}`
+      const title = '编辑文章'
+      document.title = `${title}`
+    },
+    createOrUpdateAritcle() {
+      if (this.isEdit) {
+        // eslint-disable-next-line no-undef
+        updateArticle(this.postForm, this.postForm.id).then(response => {
+          if (response.code === 200) {
+            this.$notify({
+              title: '成功',
+              message: response.message,
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              message: response.message,
+              type: 'error'
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        createArticle(this.postForm).then(response => {
+          if (response.code === 200) {
+            this.$notify({
+              title: '成功',
+              message: response.message,
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              message: response.message,
+              type: 'error'
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     },
     submitForm() {
-      console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
-          })
           this.postForm.status = 'published'
+          // eslint-disable-next-line no-undef
+          this.createOrUpdateAritcle()
           this.loading = false
         } else {
           console.log('error submit!!')
@@ -225,24 +274,21 @@ export default {
     },
     draftForm() {
       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+        this.loading = true
         this.$message({
           message: '请填写必要的标题和内容',
           type: 'warning'
         })
         return
       }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
       this.postForm.status = 'draft'
+      this.createOrUpdateAritcle()
+      this.loading = false
     },
     getRemoteUserList(query) {
       searchUser(query).then(response => {
-        if (!response.data.items) return
-        this.userListOptions = response.data.items.map(v => v.name)
+        if (!response.data) return
+        this.userListOptions = response.data.map(v => v.name)
       })
     }
   }

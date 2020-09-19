@@ -26,7 +26,7 @@ export function createArticle(data) {
 export function updateArticle(data, id) {
   return request({
     url: `/admin/article/${id}`,
-    method: 'post',
+    method: 'put',
     data
   })
 }

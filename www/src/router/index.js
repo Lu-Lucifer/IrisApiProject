@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
+
+Vue.use(Router)
 
 /* Router Modules */
 /* import componentsRouter from './modules/components'
@@ -158,23 +157,35 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: '/admin/article/create',
+        component: () => import('@/views/article/create'),
+        name: '创建文章',
+        meta: {
+          title: '创建文章',
+          roles: ['admin'], // or you can only set roles in sub nav
+          icon: 'edit'
+        }
+      },
+      {
         path: '/admin/article/index',
         component: () => import('@/views/article/list'),
         name: '文章列表',
         meta: {
           title: '文章列表',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['admin'], // or you can only set roles in sub nav
+          icon: 'list'
         }
       },
       {
-        path: '/admin/article/add',
-        component: () => import('@/views/article/create'),
-        name: '添加文章',
+        path: '/admin/article/edit/:id(\\d+)',
+        component: () => import('@/views/article/edit'),
+        name: '编辑文章',
+        hidden: true,
         meta: {
-          title: '添加文章',
+          title: '编辑文章',
           roles: ['admin'] // or you can only set roles in sub nav
         }
-      },
+      }
       // {
       //   path: '/admin/article/tag',
       //   component: () => import('@/views/article/tag'),
