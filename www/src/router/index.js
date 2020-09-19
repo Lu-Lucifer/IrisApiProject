@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
+import Index from '@/index'
 
 Vue.use(Router)
 
@@ -46,6 +47,21 @@ export const constantRoutes = [
       {
         path: '/redirect/:path(.*)',
         component: () => import('@/views/redirect/index')
+      }
+    ]
+  },
+  {
+    path: '/',
+    name: 'index',
+    component: Index,
+    hidden: true,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/dashboard/index/index'),
+        name: '学习笔记',
+        meta: { title: '学习笔记', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -218,7 +234,7 @@ export const asyncRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

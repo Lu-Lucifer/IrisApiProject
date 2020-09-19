@@ -1,15 +1,20 @@
 <template>
-  <el-dropdown :hide-on-click="false" :show-timeout="100" trigger="click">
+  <el-dropdown :show-timeout="100" trigger="click">
     <el-button plain>
-      Platfroms({{ platforms.length }})
+      {{ is_original?'原创':'转载' }}
       <i class="el-icon-caret-bottom el-icon--right" />
     </el-button>
-    <el-dropdown-menu slot="dropdown" class="no-border">
-      <el-checkbox-group v-model="platforms" style="padding: 5px 15px;">
-        <el-checkbox v-for="item in platformsOptions" :key="item.key" :label="item.key">
-          {{ item.name }}
-        </el-checkbox>
-      </el-checkbox-group>
+    <el-dropdown-menu slot="dropdown" class="no-padding">
+      <el-dropdown-item>
+        <el-radio-group v-model="is_original" style="padding: 10px;">
+          <el-radio :label="true">
+            原创
+          </el-radio>
+          <el-radio :label="false">
+            转载
+          </el-radio>
+        </el-radio-group>
+      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -18,22 +23,12 @@
 export default {
   props: {
     value: {
-      required: true,
-      default: () => [],
-      type: Array
-    }
-  },
-  data() {
-    return {
-      platformsOptions: [
-        { key: 'a-platform', name: 'a-platform' },
-        { key: 'b-platform', name: 'b-platform' },
-        { key: 'c-platform', name: 'c-platform' }
-      ]
+      type: Boolean,
+      default: false
     }
   },
   computed: {
-    platforms: {
+    is_original: {
       get() {
         return this.value
       },

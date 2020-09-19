@@ -4,13 +4,16 @@
 
       <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
         <CommentDropdown v-model="postForm.comment_disabled" />
-        <PlatformDropdown v-model="postForm.platforms" />
+        <PlatformDropdown v-model="postForm.is_original" />
         <SourceUrlDropdown v-model="postForm.source_uri" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           发布
         </el-button>
         <el-button v-loading="loading" type="warning" @click="draftForm">
           草稿
+        </el-button>
+        <el-button v-loading="loading" type="danger" @click="deleteForm">
+          删除
         </el-button>
       </sticky>
 
@@ -100,7 +103,7 @@ import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
-import { createArticle, fetchArticle, updateArticle } from '@/api/article'
+import { createArticle, deleteArticle, fetchArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
@@ -112,9 +115,10 @@ const defaultForm = {
   content_short: '', // 文章摘要
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
+  display_at: undefined, // 前台展示时间
   display_time: undefined, // 前台展示时间
   id: undefined,
-  platforms: ['a-platform'],
+  is_original: true,
   comment_disabled: false,
   importance: 0
 }
@@ -178,10 +182,12 @@ export default {
       // back end return => "2013-06-25 06:59:25"
       // front end need timestamp => 1372114765000
       get() {
-        return (+new Date(this.postForm.display_time))
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.postForm.display_time = this.postForm.display_at
+        return (+new Date(this.postForm.display_at))
       },
       set(val) {
-        this.postForm.display_time = new Date(val)
+        this.postForm.display_time = this.postForm.display_at = new Date(val)
       }
     }
   },
@@ -218,7 +224,7 @@ export default {
       const title = '编辑文章'
       document.title = `${title}`
     },
-    createOrUpdateAritcle() {
+    createOrUpdateArticle() {
       if (this.isEdit) {
         // eslint-disable-next-line no-undef
         updateArticle(this.postForm, this.postForm.id).then(response => {
@@ -229,6 +235,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.$router.push('/admin/article/index')
           } else {
             this.$notify({
               message: response.message,
@@ -247,6 +254,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.$router.push('/admin/article/index')
           } else {
             this.$notify({
               message: response.message,
@@ -264,7 +272,7 @@ export default {
           this.loading = true
           this.postForm.status = 'published'
           // eslint-disable-next-line no-undef
-          this.createOrUpdateAritcle()
+          this.createOrUpdateArticle()
           this.loading = false
         } else {
           console.log('error submit!!')
@@ -282,7 +290,30 @@ export default {
         return
       }
       this.postForm.status = 'draft'
-      this.createOrUpdateAritcle()
+      this.createOrUpdateArticle()
+      this.loading = false
+    },
+    deleteForm() {
+      this.loading = true
+      // eslint-disable-next-line no-undef
+      deleteArticle(this.postForm.id).then(response => {
+        if (response.code === 200) {
+          this.$notify({
+            title: '成功',
+            message: response.message,
+            type: 'success',
+            duration: 2000
+          })
+          this.$router.push('/admin/article/index')
+        } else {
+          this.$notify({
+            message: response.message,
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
       this.loading = false
     },
     getRemoteUserList(query) {
