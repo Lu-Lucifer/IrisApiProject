@@ -3,7 +3,6 @@
     <div class="container">
       <div>
         <navbar />
-        <tags-view />
       </div>
       <app-main />
     </div>
@@ -11,27 +10,21 @@
 </template>
 
 <script>
-import { AppMain, Navbar, TagsView } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+import { AppMain, Navbar } from './components'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Index',
   components: {
     AppMain,
-    Navbar,
-    TagsView
+    Navbar
   },
-  mixins: [ResizeMixin],
   computed: {
     ...mapState({
       device: state => state.app.device
     })
   },
   methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
   }
 }
 </script>

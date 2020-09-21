@@ -35,7 +35,7 @@
 
       <el-table-column width="180px" align="center" label="发布时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ scope.row.display_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
 

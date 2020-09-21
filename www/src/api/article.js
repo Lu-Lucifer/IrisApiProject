@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function indexList(query) {
+  return request({
+    url: '/article',
+    method: 'get',
+    params: query
+  })
+}
 export function fetchList(query) {
   return request({
     url: '/admin/article',

@@ -86,7 +86,12 @@
         </el-form-item>
 
         <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
+          <markdown-editor
+            ref="markdownEditor"
+            v-model="content"
+            :options="{hideModeSwitch:true,previewStyle:'tab'}"
+            height="400px"
+          />
         </el-form-item>
 
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
@@ -98,10 +103,10 @@
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
+import MarkdownEditor from '@/components/MarkdownEditor'
 import { validURL } from '@/utils/validate'
 import { createArticle, deleteArticle, fetchArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
@@ -115,17 +120,26 @@ const defaultForm = {
   content_short: '', // 文章摘要
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
-  display_at: undefined, // 前台展示时间
   display_time: undefined, // 前台展示时间
   id: undefined,
   is_original: true,
   comment_disabled: false,
   importance: 0
 }
+const content = ''
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown },
+  components: {
+    MarkdownEditor,
+    MDinput,
+    Upload,
+    Sticky,
+    Warning,
+    CommentDropdown,
+    PlatformDropdown,
+    SourceUrlDropdown
+  },
   props: {
     isEdit: {
       type: Boolean,
@@ -160,6 +174,7 @@ export default {
       }
     }
     return {
+      content: content,
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
@@ -183,11 +198,10 @@ export default {
       // front end need timestamp => 1372114765000
       get() {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.postForm.display_time = this.postForm.display_at
-        return (+new Date(this.postForm.display_at))
+        return (+new Date(this.postForm.display_time))
       },
       set(val) {
-        this.postForm.display_time = this.postForm.display_at = new Date(val)
+        this.postForm.display_time = new Date(val)
       }
     }
   },
@@ -206,6 +220,7 @@ export default {
     fetchData(id) {
       fetchArticle(id).then(response => {
         this.postForm = response.data
+        this.content = this.postForm.content
         if (this.isEdit) {
           this.setPageTitle()
         } else {
@@ -267,6 +282,7 @@ export default {
       }
     },
     submitForm() {
+      this.getHtml()
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -281,6 +297,7 @@ export default {
       })
     },
     draftForm() {
+      this.getHtml()
       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
         this.loading = true
         this.$message({
@@ -321,6 +338,9 @@ export default {
         if (!response.data) return
         this.userListOptions = response.data.map(v => v.name)
       })
+    },
+    getHtml() {
+      this.postForm.content = this.$refs.markdownEditor.getHtml()
     }
   }
 }
