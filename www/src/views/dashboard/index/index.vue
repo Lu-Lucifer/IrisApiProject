@@ -1,10 +1,11 @@
 <template>
   <div class="components-container">
-    <div class="createPost-main-container">
+    <div class="dashboard-editor-container">
       <el-row>
-        <el-col v-for="(item) in aritcles" :key="item.id" :span="24" style="padding: 14px;">
+        <el-col v-for="(item) in aritcles" :key="item.id" :span="24">
           <el-card :body-style="{ padding: '0px' }">
             <div style="padding: 14px;">
+              <img src="item.image_uri" alt="">
               <span> {{ item.title }}</span>
               <div> {{ item.content_short }}</div>
               <div class="bottom clearfix">
@@ -15,7 +16,6 @@
           </el-card>
         </el-col>
       </el-row>
-
     </div>
   </div>
 </template>
@@ -49,61 +49,63 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .time {
-    font-size: 13px;
-    color: #999;
-  }
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
 
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
-  }
+.button {
+  padding: 0;
+  float: right;
+}
 
-  .button {
-    padding: 0;
-    float: right;
-  }
+.image {
+  width: 100%;
+  display: block;
+}
 
-  .image {
-    width: 100%;
-    display: block;
-  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
 
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
+.clearfix:after {
+  clear: both
+}
 
-  .clearfix:after {
-    clear: both
-  }
+.components-container {
+  margin: 0;
+  position: relative;
+  height: 100vh;
+
+}
 
 .dashboard-editor-container {
   background-color: #e3e3e3;
   min-height: 100vh;
-  padding: 50px 60px 0px;
+  padding: 60px 350px;
+}
 
-  .pan-info-roles {
-    font-size: 12px;
-    font-weight: 700;
-    color: #333;
-    display: block;
-  }
+.pan-info-roles {
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+  display: block;
+}
 
-  .info-container {
-    position: relative;
-    margin-left: 190px;
-    height: 150px;
-    line-height: 200px;
+.info-container {
+  position: relative;
+  margin-left: 190px;
+  height: 150px;
+  line-height: 200px;
 
-    .display_name {
-      font-size: 48px;
-      line-height: 48px;
-      color: #212121;
-      position: absolute;
-      top: 25px;
-    }
+  .display_name {
+    font-size: 48px;
+    line-height: 48px;
+    color: #212121;
+    position: absolute;
+    top: 25px;
   }
 }
 </style>

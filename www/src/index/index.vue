@@ -5,18 +5,22 @@
         <navbar />
       </div>
       <app-main />
+      <div>
+        <footer-bar />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { AppMain, Navbar } from './components'
+import { AppMain, Navbar, FooterBar } from './components'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Index',
   components: {
     AppMain,
+    FooterBar,
     Navbar
   },
   computed: {
