@@ -47,16 +47,6 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登 陆</el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>用户名 : username</span>
-          <span>密码 : 123456</span>
-        </div>
-        <div class="tips" />
-        <!--        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
-        <!--          第三方登陆-->
-        <!--        </el-button>-->
-      </div>
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -78,8 +68,8 @@ export default {
   components: { SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+      if (value.length < 6) {
+        callback(new Error('用户名至少需要6个字符'))
       } else {
         callback()
       }
