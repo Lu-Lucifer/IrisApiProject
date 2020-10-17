@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -68,13 +69,18 @@ func CreatePermission(ctx iris.Context) {
 		}
 	}
 
-	perm.CreatePermission()
+	err = perm.CreatePermission()
+	if err != nil {
+		ctx.StatusCode(iris.StatusInternalServerError)
+		_, _ = ctx.JSON(ApiResource(400, nil, fmt.Sprintf("Error create prem: %s", err.Error())))
+		return
+	}
 
 	ctx.StatusCode(iris.StatusOK)
 	if perm.ID == 0 {
 		_, _ = ctx.JSON(ApiResource(400, perm, "操作失败"))
 	} else {
-		_, _ = ctx.JSON(ApiResource(200, perm, "操作成功"))
+		_, _ = ctx.JSON(ApiResource(200, permTransform(perm), "操作成功"))
 	}
 
 }
@@ -117,13 +123,18 @@ func UpdatePermission(ctx iris.Context) {
 
 	id, _ := ctx.Params().GetUint("id")
 	perm := models.NewPermission(id, "", "")
-	perm.UpdatePermission(aul)
+	err = perm.UpdatePermission(aul)
+	if err != nil {
+		ctx.StatusCode(iris.StatusInternalServerError)
+		_, _ = ctx.JSON(ApiResource(400, nil, fmt.Sprintf("Error create prem: %s", err.Error())))
+		return
+	}
 
 	ctx.StatusCode(iris.StatusOK)
 	if perm.ID == 0 {
 		_, _ = ctx.JSON(ApiResource(400, perm, "操作失败"))
 	} else {
-		_, _ = ctx.JSON(ApiResource(200, perm, "操作成功"))
+		_, _ = ctx.JSON(ApiResource(200, permTransform(perm), "操作成功"))
 	}
 
 }
