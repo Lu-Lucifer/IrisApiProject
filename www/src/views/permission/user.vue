@@ -39,6 +39,9 @@
         <el-form-item label="名称">
           <el-input v-model="user.username" placeholder="用户名称" />
         </el-form-item>
+        <el-form-item label="名称">
+          <el-input v-model="user.password" placeholder="密码" />
+        </el-form-item>
         <el-form-item label="描述">
           <el-input
             v-model="user.introduction"
@@ -47,7 +50,7 @@
             placeholder="用户描述"
           />
         </el-form-item>
-        <el-form-item label="权限">
+        <el-form-item label="角色">
           <el-tree
             ref="tree"
             :check-strictly="checkStrictly"
@@ -206,7 +209,7 @@ export default {
       } else {
         const { code, data } = await addUser(this.user)
         if (code === 200) {
-          this.user = data.data
+          this.user = data
           this.usersList.push(this.user)
         }
       }

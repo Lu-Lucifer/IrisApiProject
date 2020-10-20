@@ -10,12 +10,17 @@
       </el-table-column>
       <el-table-column align="center" label="权限标识" width="220">
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="权限名称" width="220">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.display_name }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="请求方式" width="220">
+        <template slot-scope="scope">
+          {{ scope.row.act }}
         </template>
       </el-table-column>
       <el-table-column align="header-center" label="描述">
@@ -34,10 +39,13 @@
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑权限':'添加权限'">
       <el-form :model="perm" label-width="80px" label-position="left">
         <el-form-item label="标识">
-          <el-input v-model="perm.key" placeholder="权限标识" />
+          <el-input v-model="perm.name" placeholder="权限标识" />
         </el-form-item>
         <el-form-item label="名称">
-          <el-input v-model="perm.name" placeholder="权限名称" />
+          <el-input v-model="perm.display_name" placeholder="权限名称" />
+        </el-form-item>
+        <el-form-item label="请求方法">
+          <el-input v-model="perm.act" placeholder="权限请求方法" />
         </el-form-item>
         <el-form-item label="描述">
           <el-input
@@ -63,8 +71,9 @@ import { getPerms, addPerm, deletePerm, updatePerm } from '@/api/perm'
 
 const defaultPerm = {
   id: 0,
-  key: '',
+  display_name: '',
   name: '',
+  act: '',
   description: ''
 }
 
@@ -142,19 +151,20 @@ export default {
       } else {
         const { code, data } = await addPerm(this.perm)
         if (code === 200) {
-          this.perm = data.data
+          this.perm = data
           this.permsList.push(this.perm)
         }
       }
 
-      const { description, name, key } = this.perm
+      const { description, name, display_name, act } = this.perm
       this.dialogVisible = false
       this.$notify({
         title: 'Success',
         dangerouslyUseHTMLString: true,
         message: `
-            <div>权限标识: ${key}</div>
-            <div>权限名称: ${name}</div>
+            <div>权限标识: ${name}</div>
+            <div>权限名称: ${display_name}</div>
+            <div>权限请求方式: ${act}</div>
             <div>描述: ${description}</div>
           `,
         type: 'success'

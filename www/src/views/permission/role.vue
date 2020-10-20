@@ -206,7 +206,7 @@ export default {
       } else {
         const { code, data } = await addRole(this.role)
         if (code === 200) {
-          this.role = data.data
+          this.role = data
           this.rolesList.push(this.role)
         }
       }

@@ -51,7 +51,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/admin/login',
+    path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
@@ -71,12 +71,12 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/admin',
+    path: '/',
     component: Layout,
-    redirect: '/admin/dashboard',
+    redirect: '/dashboard',
     children: [
       {
-        path: '/admin/dashboard',
+        path: '/dashboard',
         component: () => import('@/views/dashboard/admin/index'),
         name: '控制面板',
         meta: { title: '控制面板', icon: 'dashboard', affix: true }
@@ -109,13 +109,13 @@ export const constantRoutes = [
   //   ]
   // },
   {
-    path: '/admin/profile',
+    path: '/profile',
     component: Layout,
     redirect: '/admin/profile/index',
     hidden: true,
     children: [
       {
-        path: '/admin/profile/index',
+        path: '/profile/index',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
         meta: { title: 'Profile', icon: 'user', noCache: true }
@@ -130,9 +130,9 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/admin/permission',
+    path: '/permission',
     component: Layout,
-    redirect: '/admin/permission/page',
+    redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
     name: '系统权限',
     meta: {
@@ -142,7 +142,7 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: '/admin/permission/page',
+        path: '/permission/page',
         component: () => import('@/views/permission/perm'),
         name: '权限页面',
         meta: {
@@ -151,7 +151,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/admin/permission/directive',
+        path: '/permission/directive',
         component: () => import('@/views/permission/user'),
         name: '用户页面',
         meta: {
@@ -160,7 +160,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/admin/permission/role',
+        path: '/permission/role',
         component: () => import('@/views/permission/role'),
         name: '角色页面',
         meta: {
