@@ -3,7 +3,11 @@ import request from '@/utils/request'
 export function getRoutes() {
   return request({
     url: '/admin/permissions',
-    method: 'get'
+    method: 'get',
+    params: {
+      offset: -1,
+      limit: -1
+    }
   })
 }
 
