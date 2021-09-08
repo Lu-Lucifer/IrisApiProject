@@ -7,8 +7,9 @@ import (
 
 func main() {
 	webServer := web.Init()
-	templatesFS := iris.PrefixDir("./dist", AssetFile())
-	publicFS := iris.PrefixDir("./dist", AssetFile())
-	webServer.AddStatic(templatesFS, publicFS)
+	webServer.AddStatic("/", iris.Dir("./dist"), iris.DirOptions{
+		IndexName: "index.html",
+		SPA:       true,
+	})
 	webServer.Run()
 }
