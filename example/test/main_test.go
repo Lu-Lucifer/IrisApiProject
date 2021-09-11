@@ -46,18 +46,18 @@ func TestMain(m *testing.M) {
 		Level: "test",
 	}
 
-	err := initdb.InitDB(config)
+	TestServer.AddModule(v1.Party())
+	err := TestServer.InitRouter()
+	if err != nil {
+		fmt.Printf("初始化路由错误： %v\n", err)
+		panic(err)
+	}
+	err = initdb.InitDB(config)
 	if err != nil {
 		fmt.Printf("初始化数据库错误： %v\n", err)
 		panic(err)
 	}
 
-	TestServer.AddModule(v1.Party())
-	err = TestServer.InitRouter()
-	if err != nil {
-		fmt.Printf("初始化路由错误： %v\n", err)
-		panic(err)
-	}
 	code := m.Run()
 
 	err = dorpDB(uuid)
