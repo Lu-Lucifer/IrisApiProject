@@ -5,11 +5,11 @@ import (
 )
 
 func TestList(t *testing.T) {
-	TestServer.GetTestLogin(t, "/api/v1/login", nil)
-	defer TestServer.GetTestLogout(t, "/api/v1/logout", nil)
+	client := TestServer.GetTestLogin(t, "/api/v1/auth/login", nil)
+	defer client.Logout("/api/v1/users/logout", nil)
 
 	// url := "v1/admin/api/getApiList"
-	// pageKeys := base.ResponseKeys{    
+	// pageKeys := tests.Responses{
 	// 	{Key: "pageSize", Value: 10},
 	// 	{Key: "page", Value: 1},
 	// 	{Key: "list", Value: nil},
