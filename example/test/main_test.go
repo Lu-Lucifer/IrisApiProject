@@ -33,6 +33,7 @@ func TestMain(m *testing.M) {
 			UserName: "root",
 			Password: mysql_pwd,
 			DBName:   uuid,
+			LogMode:  true,
 		},
 		CacheType: "redis",
 		Cache: initdb.Cache{
