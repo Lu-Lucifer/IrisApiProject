@@ -33,3 +33,26 @@ func TestList(t *testing.T) {
 	}
 	client.GET(url, pageKeys, tests.RequestParams)
 }
+
+func TestCreate(t *testing.T) {
+	client := TestServer.GetTestLogin(t, "/api/v1/auth/login", nil)
+	defer client.Logout("/api/v1/users/logout", nil)
+	url := "/api/v1/users"
+	pageKeys := tests.Responses{
+		{Key: "code", Value: 2000},
+		{Key: "message", Value: "请求成功"},
+		{Key: "data", Value: tests.Responses{
+			{Key: "id", Value: 1, Type: "ge"},
+		},
+		},
+	}
+	data := map[string]interface{}{
+		"name":     "测试名称",
+		"username": "test_username",
+		"intro":    "测试描述信息",
+		"avatar":   "",
+		"password": "123456",
+	}
+
+	client.POST(url, pageKeys, data)
+}
