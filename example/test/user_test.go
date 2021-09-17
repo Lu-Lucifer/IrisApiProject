@@ -9,18 +9,6 @@ import (
 func TestList(t *testing.T) {
 	client := TestServer.GetTestLogin(t, "/api/v1/auth/login", nil)
 	defer client.Logout("/api/v1/users/logout", nil)
-	// {
-	// 	"id": 1,
-	// 	"updatedAt": "2021-09-17T00:12:57+08:00",
-	// 	"createdAt": "2021-09-17T00:12:57+08:00",
-	// 	"name": "超级管理员",
-	// 	"username": "admin",
-	// 	"introduction": "超级管理员",
-	// 	"avatar": "/static/images/avatar.jpg",
-	// 	"roles": [
-	// 		"超级管理员"
-	// 	]
-	// }
 	url := "/api/v1/users"
 	pageKeys := tests.Responses{
 		{Key: "code", Value: 2000},
