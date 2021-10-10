@@ -13,5 +13,5 @@ func main() {
 		PartyFunc: v1.Party(),
 	}
 	wi.AddModule(v1Party)
-	web.Start(web_iris.Init())
+	web.Start(wi)
 }
