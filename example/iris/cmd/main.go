@@ -17,6 +17,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var MigrationId string
+
 func main() {
 	// cmdInit 初始化项目
 	var cmdInit = &cobra.Command{
@@ -37,16 +39,33 @@ func main() {
 		},
 	}
 
+	var cmdRefresh = &cobra.Command{
+		Use:   "refresh",
+		Short: "exec refresh migration",
+		Long:  `exec refresh  migrations which are you writed in  migrate.go file`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			err := migration.Gormigrate().RollbackTo(migration.GetFirstMigrateion().ID)
+			if err != nil {
+				return err
+			}
+			return migration.Gormigrate().Migrate()
+		},
+	}
+
 	var cmdRollback = &cobra.Command{
 		Use:   "rollback",
 		Short: "exec rollback",
 		Long:  `exec rollback migrate command which are you execed`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return migration.Gormigrate().RollbackLast()
+			if MigrationId == "" {
+				return migration.Gormigrate().RollbackLast()
+			}
+			return migration.Gormigrate().RollbackTo(MigrationId)
 		},
 	}
+	cmdRollback.PersistentFlags().StringVarP(&MigrationId, "to", "t", "", "Rollback to migration id")
 
 	var rootCmd = &cobra.Command{Use: "iris-admin"}
-	rootCmd.AddCommand(cmdInit, cmdRun, cmdRollback)
+	rootCmd.AddCommand(cmdInit, cmdRun, cmdRollback, cmdRefresh)
 	rootCmd.Execute()
 }
