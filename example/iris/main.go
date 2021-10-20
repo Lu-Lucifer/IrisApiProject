@@ -2,7 +2,6 @@ package main
 
 import (
 	v1 "github.com/snowlyg/iris-admin/modules/v1"
-	"github.com/snowlyg/iris-admin/server/database"
 	"github.com/snowlyg/iris-admin/server/web"
 	"github.com/snowlyg/iris-admin/server/web/web_iris"
 )
